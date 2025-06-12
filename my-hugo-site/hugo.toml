@@ -1,0 +1,12 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+title = 'My New Hugo Site'
+
+[build]
+  writeStats = true # Generates hugo_stats.json for TailwindCSS JIT
+
+[assets]
+  [assets.postcss]
+    # Hugo will automatically detect postcss.config.js
+    # We can specify it explicitly if needed:
+    # configFile = "postcss.config.js"

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode | default "en-us" }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+
+    {{ $styles := resources.Get "css/input.css" | resources.PostCSS }}
+    {{ if .Site.IsServer }}
+        <link rel="stylesheet" href="{{ $styles.RelPermalink }}">
+    {{ else }}
+        {{ $styles := $styles | minify | fingerprint }}
+        <link rel="stylesheet" href="{{ $styles.RelPermalink }}" integrity="{{ $styles.Data.Integrity }}">
+    {{ end }}
+
+    {{ $js := resources.Get "js/app.js" | js.Build }}
+    {{ if .Site.IsServer }}
+        <script src="{{ $js.RelPermalink }}" defer></script>
+    {{ else }}
+        {{ $js := $js | minify | fingerprint }}
+        <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+    {{ end }}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+
+</head>
+<body class="bg-gray-900 text-gray-100 font-roboto selection:bg-purple-500 selection:text-white">
+
+    <header class="bg-gray-800 shadow-lg">
+        <nav class="container mx-auto px-6 py-3">
+            <div class="flex items-center justify-between">
+                <a href="{{ .Site.BaseURL }}" class="text-2xl font-orbitron font-bold text-purple-400 hover:text-purple-300 transition-colors">
+                    {{ .Site.Title }}
+                </a>
+                <!-- Navigation links can be added here -->
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {{ block "main" . }}{{ end }}
+    </main>
+
+    <footer class="bg-gray-800 mt-12 py-8 text-center">
+        <p class="text-gray-400">&copy; {{ now.Format "2006" }} {{ .Site.Title }}. All rights reserved.</p>
+        <p class="text-xs text-gray-500">Powered by Hugo & TailwindCSS. Styled with a Retro-Futuristic vision.</p>
+    </footer>
+
+</body>
+</html>
