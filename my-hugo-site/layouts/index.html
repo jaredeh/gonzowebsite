@@ -1,0 +1,95 @@
+{{ define "main" }}
+<div class="container mx-auto px-6 py-12">
+
+    <!-- Hero Section -->
+    <section class="text-center py-16 md:py-24">
+        <h1 class="font-orbitron text-5xl md:text-7xl font-bold mb-6">
+            <span class="text-purple-400">{{ .Params.hero.title_part1 | default "Future" }}</span><span class="text-teal-400">{{ .Params.hero.title_part2 | default "Net" }}</span> <span class="text-pink-400">{{ .Params.hero.title_part3 | default "Synergy" }}</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto">
+            {{ .Params.hero.tagline | default "Harnessing the digital ether..." }}
+        </p>
+        <a href="{{ .Params.hero.cta_button_link | default "#features" }}"
+           class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-transform transform hover:scale-105 shadow-lg">
+            {{ .Params.hero.cta_button_text | default "Discover" }}
+        </a>
+    </section>
+
+    <!-- Introduction from .Content -->
+    {{ if .Content }}
+    <section class="py-12 md:py-16 text-center">
+        <div class="prose prose-lg prose-invert mx-auto max-w-3xl text-gray-300">
+            {{ .Content }}
+        </div>
+    </section>
+    {{ end }}
+
+    <!-- Features Section -->
+    {{ with .Params.features_section }}
+    <section id="features" class="py-16 md:py-24">
+        <h2 class="font-orbitron text-4xl font-bold text-center mb-16 text-teal-400">{{ .title | default "Core Constructs" }}</h2>
+        <div class="grid md:grid-cols-1 lg:grid-cols-3 gap-10">
+            {{ range .features }}
+            <div class="bg-gray-800 p-8 rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300 border-l-4 {{ .border_color_class | default "border-pink-500" }}">
+                {{ if .image_url }}
+                <img src="{{ .image_url }}" alt="{{ .title }}" class="w-full h-48 object-cover rounded-md mb-6 border border-gray-700">
+                {{ end }}
+                <div class="{{ replace (replace .border_color_class "border-" "text-") "-500" "-400" }} mb-4"> <!-- Dynamically set icon color based on border color -->
+                    <!-- Placeholder for an icon e.g. using Flowbite icons or SVG. Kept generic for now. -->
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="font-orbitron text-2xl font-semibold mb-3 {{ replace (replace .border_color_class "border-" "text-") "-500" "-400" }}">{{ .title }}</h3>
+                <p class="text-gray-400">
+                    {{ .description }}
+                </p>
+            </div>
+            {{ end }}
+        </div>
+    </section>
+    {{ end }}
+
+    <!-- Call to Action Section -->
+    {{ with .Params.cta_section }}
+    <section class="text-center py-16 md:py-24 bg-gray-800 my-12 rounded-xl shadow-xl">
+        <h2 class="font-orbitron text-4xl font-bold mb-6 text-pink-400">{{ .title | default "Join the Vanguard" }}</h2>
+        <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
+            {{ .tagline | default "The future is not an eventuality..." }}
+        </p>
+        <button data-modal-target="{{ .modal_id | default "signup-modal" }}" data-modal-toggle="{{ .modal_id | default "signup-modal" }}"
+                class="bg-teal-500 hover:bg-teal-600 text-white font-bold py-4 px-10 rounded-lg text-xl transition-transform transform hover:scale-105 shadow-lg">
+            {{ .button_text | default "Initiate Connection" }}
+        </button>
+    </section>
+    {{ end }}
+
+</div>
+
+<!-- Flowbite Modal for Sign Up (structure remains the same, content could also be parameterized if needed) -->
+<div id="{{ .Params.cta_section.modal_id | default "signup-modal" }}" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+    <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-gray-700 rounded-lg shadow dark:bg-gray-700">
+            <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-600 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white" data-modal-hide="{{ .Params.cta_section.modal_id | default "signup-modal" }}">
+                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                <span class="sr-only">Close modal</span>
+            </button>
+            <div class="p-6 text-center">
+                <svg aria-hidden="true" class="mx-auto mb-4 w-14 h-14 text-teal-400 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <h3 class="mb-5 text-lg font-orbitron font-normal text-gray-200 dark:text-gray-300">Initiate Synaptic Uplink?</h3>
+                <p class="mb-5 text-sm text-gray-400">Enter your email address to join the mailing list and interface with FutureNet.</p>
+                <form action="#" method="POST" class="space-y-4">
+                    <div>
+                        <label for="email" class="block mb-2 text-sm font-medium text-purple-300 dark:text-purple-300 text-left">Email Address</label>
+                        <input type="email" name="email" id="email" class="bg-gray-600 border border-gray-500 text-gray-200 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5" placeholder="you@thefuture.net" required>
+                    </div>
+                    <button type="submit" class="w-full text-white bg-purple-600 hover:bg-purple-700 focus:ring-4 focus:outline-none focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        Engage & Subscribe
+                    </button>
+                    <button data-modal-hide="{{ .Params.cta_section.modal_id | default "signup-modal" }}" type="button" class="w-full text-gray-400 bg-transparent hover:bg-gray-600 hover:text-white focus:ring-4 focus:outline-none focus:ring-gray-600 rounded-lg border border-gray-500 text-sm font-medium px-5 py-2.5 hover:text-white focus:z-10">Cancel Transmission</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ end }}
